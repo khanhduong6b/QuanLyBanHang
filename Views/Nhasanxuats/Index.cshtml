@@ -14,9 +14,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Mansx)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Tennsx)
             </th>
             <th>
@@ -29,17 +26,15 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Mansx)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Tennsx)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Diachi)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Mansx }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Mansx})
+                <a asp-action="Edit" asp-route-id="@item.Mansx">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Mansx">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Mansx">Delete</a>
             </td>
         </tr>
 }
