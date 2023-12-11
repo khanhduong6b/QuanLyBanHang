@@ -1,0 +1,47 @@
+﻿@model IEnumerable<QuanLyBanHang.Models.Nhasanxuat>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Mansx)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tennsx)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Diachi)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mansx)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tennsx)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diachi)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Mansx }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Mansx})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
