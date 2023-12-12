@@ -64,7 +64,7 @@ namespace QuanLyBanHang.Controllers
             {
                 if (_context.Nhasanxuats.Find(nhasanxuat.Mansx) != null)
                 {
-                    ModelState.AddModelError("Mansx", "Ma nha san xuat bi trung");
+                    ModelState.AddModelError("Mansx", "Mã nhà sản xuất bị trùng");
                 }
                 else
                 {
