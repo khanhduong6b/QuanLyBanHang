@@ -54,7 +54,7 @@ public partial class QlbhContext : DbContext
             entity.Property(e => e.Dongia).HasColumnName("dongia");
             entity.Property(e => e.Soluong).HasColumnName("soluong");
 
-            entity.HasOne(d => d.MahangNavigation).WithMany(p => p.Chitietphieudathangs)
+            entity.HasOne(d => d.MahangNavigation).WithMany(p => p.Chitietphieudathang)
                 .HasForeignKey(d => d.Mahang)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_chitietphieudathang_hanghoa");
@@ -82,7 +82,7 @@ public partial class QlbhContext : DbContext
                 .HasColumnName("donvitinh");
             entity.Property(e => e.Soluong).HasColumnName("soluong");
 
-            entity.HasOne(d => d.MahangNavigation).WithMany(p => p.Chitietphieugiaohangs)
+            entity.HasOne(d => d.MahangNavigation).WithMany(p => p.Chitietphieugiaohang)
                 .HasForeignKey(d => d.Mahang)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_chitietphieugiaohang_hanghoa");

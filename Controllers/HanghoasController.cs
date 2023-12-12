@@ -60,6 +60,10 @@ namespace QuanLyBanHang.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Mahang,Tenhang,Donvitinh,Dongia,Hinh,Maloai,Mansx")] Hanghoa hanghoa)
         {
+            if(_context.Hanghoas.Find(hanghoa.Mahang)!=null)
+            {
+                ModelState.AddModelError("Mahang", "Ma hang bi trung");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(hanghoa);
