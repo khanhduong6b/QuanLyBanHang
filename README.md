@@ -54,4 +54,4 @@ This project aims to provide a comprehensive platform for businesses to manage t
 
 This project is licensed under the MIT License.
 
-Copyright (c) 2023, [Your Name]
+Copyright (c) 2023, Kelvin Ho
