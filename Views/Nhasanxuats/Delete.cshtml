@@ -5,9 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+@{
+    if(ViewBag.flagDelete == true)
+    {
+        <h2>Xóa thông tin nhà sản xuất</h2>
+        <h3>Bạn muốn xóa nhà sản xuất này ?</h3>
+    }
+    else
+    {
+        <h3>Bạn không thể xóa nhà sản xuất này!</h3>
+    }
+}
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>Nhasanxuat</h4>
     <hr />
@@ -33,8 +42,14 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Mansx" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        @{
+            if(ViewBag.flagDelete == true)
+            {
+                <input type="hidden" asp-for="Mansx" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            }
+        }
+
         <a asp-action="Index">Back to List</a>
     </form>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -59,38 +59,19 @@ namespace QuanLyBanHang.Controllers
         public async Task<IActionResult> Create([Bind("Mansx,Tennsx,Diachi")] Nhasanxuat nhasanxuat)
         {
 
-            if (nhasanxuat.Mansx != null)
-            {
-                foreach(var item in _context.Nhasanxuats)
-                {
-                    if(nhasanxuat.Mansx == item.Mansx)
-                    {
-                        ModelState.AddModelError("Mansx", "Ma nha san xuat da ton tai");
-                        break;
-                    }
-                }
-            }
-
-            if(nhasanxuat.Mansx == null)
-            {
-                ModelState.AddModelError("Mansx", "Vui long ma nha san xuat");
-            }
-
-            if (nhasanxuat.Tennsx == null)
-            {
-                ModelState.AddModelError("Tennsx", "Vui long ten nha san xuat");
-            }
-
-            if (nhasanxuat.Diachi == null)
-            {
-                ModelState.AddModelError("Diachi", "Vui long dia chi");
-            }
 
             if (ModelState.IsValid)
             {
-                _context.Add(nhasanxuat);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_context.Nhasanxuats.Find(nhasanxuat.Mansx) != null)
+                {
+                    ModelState.AddModelError("Mansx", "Ma nha san xuat bi trung");
+                }
+                else
+                {
+                    _context.Add(nhasanxuat);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(nhasanxuat);
         }
@@ -123,16 +104,6 @@ namespace QuanLyBanHang.Controllers
                 return NotFound();
             }
 
-            if (nhasanxuat.Tennsx == null)
-            {
-                ModelState.AddModelError("Tennsx", "Vui long ten nha san xuat");
-            }
-
-            if (nhasanxuat.Diachi == null)
-            {
-                ModelState.AddModelError("Diachi", "Vui long dia chi");
-            }
-
             if (ModelState.IsValid)
             {
                 try
@@ -159,6 +130,8 @@ namespace QuanLyBanHang.Controllers
         // GET: Nhasanxuats/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
+            var a = _context.Hanghoas.Where(k => k.Mansx == id).ToList().Count;
+
             if (id == null || _context.Nhasanxuats == null)
             {
                 return NotFound();
@@ -170,8 +143,13 @@ namespace QuanLyBanHang.Controllers
             {
                 return NotFound();
             }
+            if (a <= 0)
+                ViewBag.flagDelete = true;
+            else
+                ViewBag.flagDelete = false;
 
             return View(nhasanxuat);
+
         }
 
         // POST: Nhasanxuats/Delete/5
@@ -184,26 +162,18 @@ namespace QuanLyBanHang.Controllers
             {
                 return Problem("Entity set 'QlbhContext.Nhasanxuats'  is null.");
             }
-            Nhasanxuat? nhasanxuat = await _context.Nhasanxuats.FindAsync(id);
-     
-            
-                foreach (var item in _context.Hanghoas)
-                {
-                    if (nhasanxuat.Mansx == item.Mansx)
-                    {
-                        ModelState.AddModelError("", "Khong the xoa duoc ma nha san xuat");
-                        break;
-                    }
-                }
+            var nhasanxuat = await _context.Nhasanxuats.FindAsync(id);
 
-
-            if (ModelState.IsValid)
+            if (nhasanxuat != null)
             {
-                _context.Nhasanxuats.Remove(nhasanxuat);
+                if (ModelState.IsValid)
+                {
+                    _context.Nhasanxuats.Remove(nhasanxuat);
 
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(nhasanxuat);
         }
