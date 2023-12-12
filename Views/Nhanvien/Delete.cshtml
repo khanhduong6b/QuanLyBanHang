@@ -1,0 +1,64 @@
+﻿@model QuanLyBanHang.Models.Nhanvien
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+@{
+    if (ViewBag.flagDelete == true)
+    {
+        <h2>Xóa thông tin nhân viên</h2>
+        <h3>Bạn muốn xóa nhân viên này ?</h3>
+    }
+    else
+    {
+        <h3>Bạn không thể xóa nhân viên này!</h3>
+    }
+}
+<div>
+    <h4>Nhanvien</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tennv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tennv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ngaysinh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ngaysinh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Phai)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Phai)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Diachi)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Diachi)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        @{
+            if (ViewBag.flagDelete == true)
+            {
+                <input type="hidden" asp-for="Manv" />
+                <input type="submit" value="Xoá" class="btn btn-danger" />
+            }
+        }
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
