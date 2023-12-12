@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuanLyBanHang.Models;
 
 namespace QuanLyBanHang.Controllers
@@ -57,6 +58,34 @@ namespace QuanLyBanHang.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Mansx,Tennsx,Diachi")] Nhasanxuat nhasanxuat)
         {
+
+            if (nhasanxuat.Mansx != null)
+            {
+                foreach(var item in _context.Nhasanxuats)
+                {
+                    if(nhasanxuat.Mansx == item.Mansx)
+                    {
+                        ModelState.AddModelError("Mansx", "Ma nha san xuat da ton tai");
+                        break;
+                    }
+                }
+            }
+
+            if(nhasanxuat.Mansx == null)
+            {
+                ModelState.AddModelError("Mansx", "Vui long ma nha san xuat");
+            }
+
+            if (nhasanxuat.Tennsx == null)
+            {
+                ModelState.AddModelError("Tennsx", "Vui long ten nha san xuat");
+            }
+
+            if (nhasanxuat.Diachi == null)
+            {
+                ModelState.AddModelError("Diachi", "Vui long dia chi");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(nhasanxuat);
@@ -92,6 +121,16 @@ namespace QuanLyBanHang.Controllers
             if (id != nhasanxuat.Mansx)
             {
                 return NotFound();
+            }
+
+            if (nhasanxuat.Tennsx == null)
+            {
+                ModelState.AddModelError("Tennsx", "Vui long ten nha san xuat");
+            }
+
+            if (nhasanxuat.Diachi == null)
+            {
+                ModelState.AddModelError("Diachi", "Vui long dia chi");
             }
 
             if (ModelState.IsValid)
@@ -140,18 +179,33 @@ namespace QuanLyBanHang.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+
             if (_context.Nhasanxuats == null)
             {
                 return Problem("Entity set 'QlbhContext.Nhasanxuats'  is null.");
             }
-            var nhasanxuat = await _context.Nhasanxuats.FindAsync(id);
-            if (nhasanxuat != null)
+            Nhasanxuat? nhasanxuat = await _context.Nhasanxuats.FindAsync(id);
+     
+            
+                foreach (var item in _context.Hanghoas)
+                {
+                    if (nhasanxuat.Mansx == item.Mansx)
+                    {
+                        ModelState.AddModelError("", "Khong the xoa duoc ma nha san xuat");
+                        break;
+                    }
+                }
+
+
+            if (ModelState.IsValid)
             {
                 _context.Nhasanxuats.Remove(nhasanxuat);
+
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(nhasanxuat);
         }
 
         private bool NhasanxuatExists(string id)

@@ -5,7 +5,7 @@ namespace QuanLyBanHang.Models;
 
 public partial class Nhasanxuat
 {
-    public string Mansx { get; set; } = null!;
+    public string? Mansx { get; set; }
 
     public string? Tennsx { get; set; }
 
