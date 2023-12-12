@@ -59,9 +59,13 @@ namespace QuanLyBanHang.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(nhanvien);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (!NhanvienExists(nhanvien.Manv))
+                {
+                    _context.Add(nhanvien);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else ModelState.AddModelError("Manv", "Mã nhân viên bị trùng");
             }
             return View(nhanvien);
         }
@@ -120,6 +124,7 @@ namespace QuanLyBanHang.Controllers
         // GET: Nhanvien/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
+            var a = _context.Phieugiaohangs.Where(k => k.Manv == id).ToList().Count;
             if (id == null || _context.Nhanviens == null)
             {
                 return NotFound();
@@ -131,7 +136,10 @@ namespace QuanLyBanHang.Controllers
             {
                 return NotFound();
             }
-
+            if (a <= 0)
+                ViewBag.flagDelete = true;
+            else
+                ViewBag.flagDelete = false;
             return View(nhanvien);
         }
 
