@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuanLyBanHang.Models;
 
 namespace QuanLyBanHang.Controllers
@@ -57,11 +58,20 @@ namespace QuanLyBanHang.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Mansx,Tennsx,Diachi")] Nhasanxuat nhasanxuat)
         {
+
+
             if (ModelState.IsValid)
             {
-                _context.Add(nhasanxuat);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_context.Nhasanxuats.Find(nhasanxuat.Mansx) != null)
+                {
+                    ModelState.AddModelError("Mansx", "Mã nhà sản xuất bị trùng");
+                }
+                else
+                {
+                    _context.Add(nhasanxuat);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(nhasanxuat);
         }
@@ -120,6 +130,8 @@ namespace QuanLyBanHang.Controllers
         // GET: Nhasanxuats/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
+            var a = _context.Hanghoas.Where(k => k.Mansx == id).ToList().Count;
+
             if (id == null || _context.Nhasanxuats == null)
             {
                 return NotFound();
@@ -131,8 +143,13 @@ namespace QuanLyBanHang.Controllers
             {
                 return NotFound();
             }
+            if (a <= 0)
+                ViewBag.flagDelete = true;
+            else
+                ViewBag.flagDelete = false;
 
             return View(nhasanxuat);
+
         }
 
         // POST: Nhasanxuats/Delete/5
@@ -140,18 +157,25 @@ namespace QuanLyBanHang.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+
             if (_context.Nhasanxuats == null)
             {
                 return Problem("Entity set 'QlbhContext.Nhasanxuats'  is null.");
             }
             var nhasanxuat = await _context.Nhasanxuats.FindAsync(id);
+
             if (nhasanxuat != null)
             {
-                _context.Nhasanxuats.Remove(nhasanxuat);
+                if (ModelState.IsValid)
+                {
+                    _context.Nhasanxuats.Remove(nhasanxuat);
+
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(nhasanxuat);
         }
 
         private bool NhasanxuatExists(string id)
